@@ -1,0 +1,43 @@
+{
+  "name": "markdown-to-html-cli",
+  "version": "0.1.0",
+  "description": "Convert Markdown to self-contained HTML using Unified, Shiki, Mermaid SVG, and GitHub Markdown CSS.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "md2html": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "gen:css": "node scripts/prepare-sea.mjs",
+    "package": "npm run gen:css && bun build --compile src/index.ts --outfile bin/md2html",
+    "package:macos-arm64": "npm run gen:css && bun build --compile --target=bun-darwin-arm64 src/index.ts --outfile bin/md2html-macos-arm64",
+    "package:macos-x64": "npm run gen:css && bun build --compile --target=bun-darwin-x64 src/index.ts --outfile bin/md2html-macos-x64",
+    "package:linux-x64": "npm run gen:css && bun build --compile --target=bun-linux-x64 src/index.ts --outfile bin/md2html-linux-x64",
+    "package:win-x64": "npm run gen:css && bun build --compile --target=bun-windows-x64 src/index.ts --outfile bin/md2html-win-x64.exe"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "github-markdown-css": "^5.8.1",
+    "mermaid": "^11.16.0",
+    "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.1",
+    "shiki": "^3.2.2",
+    "unified": "^11.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}

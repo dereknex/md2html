@@ -1,0 +1,35 @@
+# Dependency directories
+node_modules/
+
+# Build outputs
+dist/
+bin/
+
+# Bun build artifacts
+*.bun-build
+.bun/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Output / generated HTML files
+*.html
+examples/*.html
