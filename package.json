@@ -11,16 +11,16 @@
     "dist"
   ],
   "scripts": {
-    "dev": "tsx src/index.ts",
+    "dev": "bun src/index.ts",
     "build": "tsc",
     "lint": "tsc --noEmit",
-    "prepublishOnly": "npm run build",
-    "gen:css": "node scripts/prepare-sea.mjs",
-    "package": "npm run gen:css && bun build --compile src/index.ts --outfile bin/md2html",
-    "package:macos-arm64": "npm run gen:css && bun build --compile --target=bun-darwin-arm64 src/index.ts --outfile bin/md2html-macos-arm64",
-    "package:macos-x64": "npm run gen:css && bun build --compile --target=bun-darwin-x64 src/index.ts --outfile bin/md2html-macos-x64",
-    "package:linux-x64": "npm run gen:css && bun build --compile --target=bun-linux-x64 src/index.ts --outfile bin/md2html-linux-x64",
-    "package:win-x64": "npm run gen:css && bun build --compile --target=bun-windows-x64 src/index.ts --outfile bin/md2html-win-x64.exe"
+    "prepublishOnly": "bun run build",
+    "gen:css": "bun scripts/prepare-sea.mjs",
+    "package": "bun run gen:css && bun build --compile src/index.ts --outfile bin/md2html",
+    "package:macos-arm64": "bun run gen:css && bun build --compile --target=bun-darwin-arm64 src/index.ts --outfile bin/md2html-macos-arm64",
+    "package:macos-x64": "bun run gen:css && bun build --compile --target=bun-darwin-x64 src/index.ts --outfile bin/md2html-macos-x64",
+    "package:linux-x64": "bun run gen:css && bun build --compile --target=bun-linux-x64 src/index.ts --outfile bin/md2html-linux-x64",
+    "package:win-x64": "bun run gen:css && bun build --compile --target=bun-windows-x64 src/index.ts --outfile bin/md2html-win-x64.exe"
   },
   "engines": {
     "node": ">=20"
@@ -37,7 +37,6 @@
   },
   "devDependencies": {
     "@types/node": "^22.20.0",
-    "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   }
 }

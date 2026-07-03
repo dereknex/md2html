@@ -1,101 +1,102 @@
-# md2html — 自包含 HTML 转换工具 🚀
+# md2html — Self-Contained HTML Converter 🚀
 
-`md2html` 是一个命令行工具 (CLI)，用于将 Markdown 文件转换为完全**自包含 (Self-contained)**、样式优雅且支持 Mermaid 图表交互缩放的 HTML 文件。
+`md2html` is a command-line tool (CLI) designed to convert Markdown documents into completely **self-contained** HTML files with beautiful syntax highlighting and interactive Mermaid diagrams.
 
-生成的 HTML 文件内联了所有的 CSS 和 JavaScript 资源（包括 Shiki 代码高亮样式和 Mermaid 运行时），无需任何网络连接或外部文件依赖即可完美本地渲染。
-
----
-
-## ✨ 特性
-
-- 📦 **完全自包含**：所有资源（CSS、JavaScript）均在生成时编码内联，生成的单 HTML 文件可离线查看。
-- 🎨 **GitHub 渲染风格**：采用官方 `github-markdown-css`，完美复刻 GitHub 原生 Markdown 布局与主题。
-- 🔍 **Mermaid 缩放与平移 (Zoom & Pan)**：
-  - 自动渲染 Mermaid 流程图与序列图等。
-  - 支持鼠标滚轮缩放、左键拖拽平移、双指/单指触摸手势。
-  - 右上角提供悬浮控制面板（放大 `＋`、缩小 `－`、重置 `↺`）。
-- 💻 **优雅的代码高亮**：基于 Shiki 引擎，默认提供 GitHub 主题级别的代码高亮渲染。
-- 🛠️ **多平台单体二进制打包**：支持使用 Bun 编译为无依赖的独立可执行二进制文件（Windows, macOS, Linux）。
+All generated HTML files have styling and scripts (such as Shiki highlight configurations and Mermaid runtime) fully inlined. No network requests or external dependencies are required to view the output locally.
 
 ---
 
-## 🚀 快速开始
+## ✨ Features
 
-### 运行环境要求
+- 📦 **Fully Self-Contained**: CSS and JS are fully embedded inside the output. View the generated single HTML file offline seamlessly.
+- 🎨 **GitHub Markdown Style**: Adopts the official `github-markdown-css` layout, matching the look and feel of GitHub natively.
+- 🔍 **Interactive Mermaid Diagrams (Zoom & Pan)**:
+  - Automatically renders Mermaid flowcharts, sequence diagrams, etc.
+  - Supports zoom (via mouse wheel or buttons) and pan (via dragging) on desktop and touch devices.
+  - Controls panel at the top-right corner (Zoom In `＋`, Zoom Out `－`, Zoom Reset `↺`, Fullscreen `⛶`).
+- 🖥️ **Mermaid Fullscreen Mode**: Expand any diagram to fullscreen with custom background matching your light/dark system theme.
+- 💻 **Syntax Highlighting**: Uses Shiki engine under the hood, supporting major programming languages with official GitHub themes.
+- 🛠️ **Single Binary Compilation**: Fully compiled using Bun for macOS, Linux, and Windows with zero dependencies.
 
-- [Node.js](https://nodejs.org/) >= 20 或 [Bun](https://bun.sh/)
+---
 
-### 安装与构建
+## 🚀 Quick Start
 
-1. 克隆本项目并进入目录：
+### Requirements
+
+- [Bun](https://bun.sh/) >= 1.0.0
+
+### Installation & Build
+
+1. Clone the repository:
    ```bash
    git clone <repository-url> md2html
    cd md2html
    ```
 
-2. 安装依赖：
+2. Install dependencies:
    ```bash
-   npm install
+   bun install
    ```
 
-3. 生成静态资源并构建项目：
+3. Generate resources and build the project:
    ```bash
-   npm run gen:css && npm run build
+   bun run gen:css && bun run build
    ```
 
 ---
 
-## 📖 使用指南
+## 📖 Usage Guide
 
-### 命令行参数
+### CLI Command Options
 
 ```bash
-md2html [options] <input.md>
+bun dev [options] <input.md>
 ```
 
-- `-i, --input` : Markdown 源文件路径。
-- `-o, --output` : 目标 HTML 输出路径（默认在同目录下生成同名的 `.html` 文件）。
-- `-t, --theme` : Shiki 渲染主题（默认：`github-light`）。
-- `-h, --help` : 显示帮助信息。
+- `-i, --input` : Path to the Markdown source file.
+- `-o, --output` : Output path of the HTML file (defaults to the same directory with `.html` extension).
+- `-t, --theme` : Shiki theme (default: `github-light`).
+- `-h, --help` : Show help information.
 
-### 示例
+### Examples
 
 ```bash
-# 最简转换（在 examples/ 目录下生成 example.html）
-npx tsx src/index.ts examples/example.md
+# Convert a markdown file (creates examples/example.html)
+bun run dev -- examples/example.md
 
-# 指定输出文件路径及 Shiki 主题
-npx tsx src/index.ts -i README.md -o docs/index.html -t github-dark
+# Specify the output file path and dark theme
+bun run dev -- -i README.md -o docs/index.html -t github-dark
 ```
 
 ---
 
-## 🛠️ 项目管理与打包脚本
+## 🛠️ Build & Package Scripts
 
-在 `package.json` 中配置了以下常用开发命令：
+The following scripts are defined in `package.json`:
 
-- `npm run gen:css` : 提取 `node_modules` 中 CSS/JS 资源并内联入 `src/assets.ts`。
-- `npm run build` : 编译 TypeScript 代码输出至 `dist/`。
-- `npm run dev` : 使用 `tsx` 直接开发/调试 CLI 脚本。
-- `npm run package` : 使用 Bun 编译生成当前系统的单体二进制文件（输出至 `bin/md2html`）。
-- `npm run package:macos-arm64` : 交叉编译 macOS M 系列芯片二进制文件。
-- `npm run package:linux-x64` : 交叉编译 Linux x64 二进制文件。
-- `npm run package:win-x64` : 交叉编译 Windows x64 二进制可执行文件。
+- `bun run gen:css` : Extracts dependencies (mermaid, CSS) and inlines them into `src/assets.ts`.
+- `bun run build` : Compiles TypeScript files to the `dist/` directory.
+- `bun run dev` : Runs the CLI in development mode using TypeScript source directly.
+- `bun run package` : Compiles a standalone single binary for the current host architecture at `bin/md2html`.
+- `bun run package:macos-arm64` : Compiles a standalone binary for Apple Silicon macOS.
+- `bun run package:linux-x64` : Compiles a standalone binary for Linux x64.
+- `bun run package:win-x64` : Compiles a standalone executable binary for Windows x64.
 
 ---
 
-## 📁 目录结构
+## 📁 Directory Structure
 
 ```text
-├── bin/                 # 编译后的二进制可执行文件输出目录
-├── dist/                # tsc 编译输出的 JS 目录
-├── examples/            # 示例和测试 Markdown 文件
-├── scripts/             # 预构建和 Sea 资源内联脚本
-├── src/                 # TypeScript 源码目录
-│   ├── assets.ts        # 自动生成：内联的 CSS/JS 静态资源
-│   ├── convert.ts       # Unified / Markdown 解析核心逻辑
-│   ├── index.ts         # CLI 入口与参数解析
-│   └── template.ts      # HTML 骨架模板与交互脚本
-├── tsconfig.json        # TypeScript 配置
-└── package.json         # Node.js 项目配置与脚本
+├── bin/                 # Compiled standalone executable outputs
+├── dist/                # tsc compile output
+├── examples/            # Example/Test Markdown and HTML files
+├── scripts/             # Build scripts for Sea assets integration
+├── src/                 # Source directory
+│   ├── assets.ts        # Auto-generated: inlined CSS and JS assets
+│   ├── convert.ts       # Unified / Markdown parser compiler logic
+│   ├── index.ts         # CLI entrypoint and argument parser
+│   └── template.ts      # HTML wrapper skeleton and zoom/pan interactive code
+├── tsconfig.json        # TypeScript configuration
+└── package.json         # Bun configuration & dependencies
 ```
