@@ -31,6 +31,23 @@ ${css}
       margin-bottom: 16px;
       overflow: hidden;
     }
+    .mermaid-container:fullscreen {
+      width: 100vw !important;
+      height: 100vh !important;
+      background-color: var(--bgColor-default) !important;
+      border: none !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    .mermaid-container:fullscreen pre.mermaid {
+      width: 100vw !important;
+      height: 100vh !important;
+      max-height: none !important;
+      min-height: 0 !important;
+    }
     .markdown-body pre.mermaid {
       background: none !important;
       border: none !important;
@@ -82,6 +99,10 @@ ${css}
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       transition: all 0.2s ease;
     }
+    .mermaid-controls button svg {
+      display: block;
+      pointer-events: none;
+    }
     .mermaid-controls button:hover {
       background: var(--bgColor-muted);
       border-color: var(--borderColor-accent-emphasis);
@@ -116,9 +137,19 @@ ${mermaidRuntimeJs}
           const controls = document.createElement('div');
           controls.className = 'mermaid-controls';
           controls.innerHTML = \`
-            <button class="zoom-in" title="放大">＋</button>
-            <button class="zoom-out" title="缩小">－</button>
-            <button class="zoom-reset" title="重置">↺</button>
+            <button class="zoom-in" title="放大">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <button class="zoom-out" title="缩小">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <button class="zoom-reset" title="重置">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+            </button>
+            <button class="zoom-fullscreen" title="全屏">
+              <svg class="fs-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+              <svg class="exit-fs-icon" style="display:none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6m10-6h-6v6M4 10h6V4m10 6h-6V4"/></svg>
+            </button>
           \`;
 
           // 2. Insert container before the block, then move the block inside
@@ -205,6 +236,9 @@ ${mermaidRuntimeJs}
           const btnIn = controls.querySelector('.zoom-in');
           const btnOut = controls.querySelector('.zoom-out');
           const btnReset = controls.querySelector('.zoom-reset');
+          const btnFs = controls.querySelector('.zoom-fullscreen');
+          const fsIcon = btnFs.querySelector('.fs-icon');
+          const exitFsIcon = btnFs.querySelector('.exit-fs-icon');
 
           btnIn.addEventListener('click', () => {
             const nextScale = Math.min(scale * 1.3, 10);
@@ -235,6 +269,38 @@ ${mermaidRuntimeJs}
             translateX = 0;
             translateY = 0;
             updateTransform(true);
+          });
+
+          btnFs.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+              container.requestFullscreen().catch(err => {
+                console.error("Error enabling fullscreen", err);
+              });
+            } else {
+              document.exitFullscreen();
+            }
+          });
+
+          document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement === container) {
+              fsIcon.style.display = 'none';
+              exitFsIcon.style.display = 'block';
+              btnFs.title = '退出全屏';
+              scale = 1;
+              translateX = 0;
+              translateY = 0;
+              updateTransform(true);
+            } else {
+              if (exitFsIcon.style.display === 'block') {
+                fsIcon.style.display = 'block';
+                exitFsIcon.style.display = 'none';
+                btnFs.title = '全屏';
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform(true);
+              }
+            }
           });
         });
       });
