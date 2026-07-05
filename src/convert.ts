@@ -12,6 +12,8 @@ import { wrapHtml } from "./template.js";
 export interface ConvertOptions {
   title?: string;
   theme?: BundledTheme;
+  /** 默认跟随系统的主题（"system" 或强制 "light"/"dark"） */
+  colorMode?: "system" | "light" | "dark";
 }
 
 async function createHighlighterInstance(theme: BundledTheme) {
@@ -117,6 +119,7 @@ function mermaidPlugin(): Transformer<Root, Root> {
 export async function markdownToHtml(markdown: string, options: ConvertOptions = {}): Promise<string> {
   const theme = options.theme ?? "github-light";
   const title = options.title ?? "Markdown";
+  const colorMode = options.colorMode ?? "system";
 
   const highlighter = await createHighlighterInstance(theme);
 
@@ -131,7 +134,7 @@ export async function markdownToHtml(markdown: string, options: ConvertOptions =
 
     const file = await processor.process(markdown);
     const body = String(file);
-    return wrapHtml(body, githubMarkdownCss, title);
+    return wrapHtml(body, githubMarkdownCss, title, colorMode);
   } finally {
     highlighter.dispose();
   }
