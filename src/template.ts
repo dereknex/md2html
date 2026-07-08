@@ -182,6 +182,13 @@ ${mermaidRuntimeJs}
       const MODES = ["system", "light", "dark"];
       const STORAGE_KEY = "md2html-theme";
       const html = document.documentElement;
+      const mermaidSources = new WeakMap();
+
+      function cacheSources() {
+        document.querySelectorAll('pre.mermaid').forEach(block => {
+          mermaidSources.set(block, block.textContent || '');
+        });
+      }
 
       function effectiveMode(mode) {
         if (mode === "light") return "light";
